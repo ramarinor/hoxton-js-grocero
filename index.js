@@ -58,10 +58,11 @@ function removeFromCart(item) {
 		return cartItem.name === item.name;
 	});
 	itemFound.quantity--;
-
-	state.cart = state.cart.filter(function (cartItem) {
-		return cartItem.quantity > 0;
-	});
+	if (itemFound.quantity === 0) {
+		state.cart = state.cart.filter(function (cartItem) {
+			return cartItem.quantity > 0;
+		});
+	}
 }
 
 //render
