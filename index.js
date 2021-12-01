@@ -14,10 +14,7 @@ state = {
 		{ id: 9, name: "blueberry", price: 1.5 },
 		{ id: 10, name: "eggplant", price: 0.5 }
 	],
-	cart: [
-		{ id: 1, name: "beetroot", price: 0.4, quantity: 3 },
-		{ id: 2, name: "carrot", price: 0.3, quantity: 4 }
-	]
+	cart: []
 };
 
 //derived state
@@ -39,9 +36,26 @@ function addZeros(number) {
 }
 
 //actions
+function addToCart(item) {
+	const itemFound = state.cart.find(function (cartItem) {
+		return cartItem.name === item.name;
+	});
+	if (itemFound === undefined) {
+		const newCartItem = {
+			id: item.id,
+			name: item.name,
+			price: item.price,
+			quantity: 1
+		};
+		state.cart.push(newCartItem);
+	} else {
+		itemFound.quantity++;
+	}
+}
 
 //render
 function renderStoreItems() {
+	storeItemList.innerHTML = "";
 	for (const item of state.storeItems) {
 		const liEl = document.createElement("li");
 
@@ -56,6 +70,10 @@ function renderStoreItems() {
 
 		const buttonEl = document.createElement("button");
 		buttonEl.innerText = "Add to cart";
+		buttonEl.addEventListener("click", function () {
+			addToCart(item);
+			render();
+		});
 
 		liEl.append(divEl, buttonEl);
 
@@ -64,6 +82,7 @@ function renderStoreItems() {
 }
 
 function renderCartItems() {
+	cartItemList.innerHTML = "";
 	for (const item of state.cart) {
 		const liEl = document.createElement("li");
 
