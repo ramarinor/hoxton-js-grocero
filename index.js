@@ -53,6 +53,17 @@ function addToCart(item) {
 	}
 }
 
+function removeFromCart(item) {
+	const itemFound = state.cart.find(function (cartItem) {
+		return cartItem.name === item.name;
+	});
+	itemFound.quantity--;
+
+	state.cart = state.cart.filter(function (cartItem) {
+		return cartItem.quantity > 0;
+	});
+}
+
 //render
 function renderStoreItems() {
 	storeItemList.innerHTML = "";
@@ -97,6 +108,10 @@ function renderCartItems() {
 		const minusBtnEl = document.createElement("button");
 		minusBtnEl.className = "quantity-btn remove-btn center";
 		minusBtnEl.innerText = "-";
+		minusBtnEl.addEventListener("click", function () {
+			removeFromCart(item);
+			render();
+		});
 
 		const spanEl = document.createElement("span");
 		spanEl.className = "quantity-text center";
@@ -105,6 +120,9 @@ function renderCartItems() {
 		const plusBtnEl = document.createElement("button");
 		plusBtnEl.className = "quantity-btn add-btn center";
 		plusBtnEl.innerText = "+";
+		plusBtnEl.addEventListener("click", function () {
+			addToCart(item), render();
+		});
 
 		liEl.append(imgEl, pEl, minusBtnEl, spanEl, plusBtnEl);
 
