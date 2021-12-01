@@ -20,10 +20,8 @@ state = {
 //derived state
 function calculateTotal() {
 	let total = 0;
-	if (state.cart.length > 0) {
-		for (const item of state.cart) {
-			total = total + item.price * item.quantity;
-		}
+	for (const item of state.cart) {
+		total = total + item.price * item.quantity;
 	}
 	return total.toFixed(2);
 }
