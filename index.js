@@ -1,16 +1,6 @@
-/*
-
-This is how an item object should look like
-
-{
-  id: 1, // <- the item id matches the icon name in the assets/icons folder
-  name: "beetroot",
-  price: 0.35 // <- You can come up with your own prices
-}
-
-*/
 const storeItemList = document.querySelector(".store--item-list");
-
+const cartItemList = document.querySelector(".cart--item-list");
+const totalNumberSpan = document.querySelector(".total-number");
 state = {
 	storeItems: [
 		{ id: 1, name: "beetroot", price: 0.4 },
@@ -24,14 +14,22 @@ state = {
 		{ id: 9, name: "blueberry", price: 1.5 },
 		{ id: 10, name: "eggplant", price: 0.5 }
 	],
-	cart: {}
+	cart: [
+		{ id: 1, name: "beetroot", price: 0.4, quantity: 3 },
+		{ id: 2, name: "carrot", price: 0.3, quantity: 4 }
+	]
 };
 
 //derived state
-
-//actions
-
-//render
+function calculateTotal() {
+	let total = 0;
+	if (state.cart.length > 0) {
+		for (const item of state.cart) {
+			total = total + item.price * item.quantity;
+		}
+	}
+	return total.toFixed(2);
+}
 
 //helper functions
 function addZeros(number) {
@@ -40,15 +38,9 @@ function addZeros(number) {
 	return pad.substring(0, pad.length - str.length) + str;
 }
 
-{
-	/* <li>
-      <div class="store--item-icon">
-        <img src="assets/icons/001-beetroot.svg" alt="beetroot" />
-      </div>
-      <button>Add to cart</button>
-    </li> */
-}
+//actions
 
+//render
 function renderStoreItems() {
 	for (const item of state.storeItems) {
 		const liEl = document.createElement("li");
@@ -71,8 +63,44 @@ function renderStoreItems() {
 	}
 }
 
+function renderCartItems() {
+	for (const item of state.cart) {
+		const liEl = document.createElement("li");
+
+		const imgEl = document.createElement("img");
+		imgEl.className = "cart--item-icon";
+		imgEl.src = `assets/icons/${addZeros(item.id)}-${item.name}.svg`;
+		imgEl.alt = item.name;
+
+		const pEl = document.createElement("p");
+		pEl.innerText = item.name;
+
+		const minusBtnEl = document.createElement("button");
+		minusBtnEl.className = "quantity-btn remove-btn center";
+		minusBtnEl.innerText = "-";
+
+		const spanEl = document.createElement("span");
+		spanEl.className = "quantity-text center";
+		spanEl.innerText = item.quantity;
+
+		const plusBtnEl = document.createElement("button");
+		plusBtnEl.className = "quantity-btn add-btn center";
+		plusBtnEl.innerText = "+";
+
+		liEl.append(imgEl, pEl, minusBtnEl, spanEl, plusBtnEl);
+
+		cartItemList.append(liEl);
+	}
+}
+
+function renderTotal() {
+	totalNumberSpan.innerText = `£${calculateTotal()}`;
+}
+
 function render() {
 	renderStoreItems();
+	renderCartItems();
+	renderTotal();
 }
 
 //
