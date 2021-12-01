@@ -88,6 +88,12 @@ button {
 	height: 125px;
 }
 
+.store--form {
+	color: white;
+	display: grid;
+	justify-content: center;
+}
+
 @media only screen and (max-width: 600px) {
 	.store--item-list {
 		grid-template-columns: repeat(3, 125px);

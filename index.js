@@ -1,20 +1,22 @@
 const storeItemList = document.querySelector(".store--item-list");
 const cartItemList = document.querySelector(".cart--item-list");
 const totalNumberSpan = document.querySelector(".total-number");
+const storeForm = document.querySelector(".store--form");
 state = {
 	storeItems: [
-		{ id: 1, name: "beetroot", price: 0.4 },
-		{ id: 2, name: "carrot", price: 0.3 },
-		{ id: 3, name: "apple", price: 0.7 },
-		{ id: 4, name: "apricot", price: 0.9 },
-		{ id: 5, name: "avocado", price: 3.5 },
-		{ id: 6, name: "bananas", price: 1.0 },
-		{ id: 7, name: "bell-pepper", price: 0.5 },
-		{ id: 8, name: "berry", price: 1.4 },
-		{ id: 9, name: "blueberry", price: 1.5 },
-		{ id: 10, name: "eggplant", price: 0.5 }
+		{ id: 1, name: "beetroot", price: 0.4, type: "vegetable" },
+		{ id: 2, name: "carrot", price: 0.3, type: "vegetable" },
+		{ id: 3, name: "apple", price: 0.7, type: "fruit" },
+		{ id: 4, name: "apricot", price: 0.9, type: "fruit" },
+		{ id: 5, name: "avocado", price: 3.5, type: "fruit" },
+		{ id: 6, name: "bananas", price: 1.0, type: "fruit" },
+		{ id: 7, name: "bell-pepper", price: 0.5, type: "vegetable" },
+		{ id: 8, name: "berry", price: 1.4, type: "fruit" },
+		{ id: 9, name: "blueberry", price: 1.5, type: "fruit" },
+		{ id: 10, name: "eggplant", price: 0.5, type: "vegetable" }
 	],
-	cart: []
+	cart: [],
+	filter: "all"
 };
 
 //derived state
@@ -24,6 +26,16 @@ function calculateTotal() {
 		total = total + item.price * item.quantity;
 	}
 	return total.toFixed(2);
+}
+
+function getSelecetedStoreItems() {
+	if (state.filter === "all") {
+		return state.storeItems;
+	} else {
+		return state.storeItems.filter(function (storeItem) {
+			return storeItem.type === state.filter;
+		});
+	}
 }
 
 //helper functions
@@ -66,7 +78,8 @@ function removeFromCart(item) {
 //render
 function renderStoreItems() {
 	storeItemList.innerHTML = "";
-	for (const item of state.storeItems) {
+	const selectedStoreItems = getSelecetedStoreItems();
+	for (const item of selectedStoreItems) {
 		const liEl = document.createElement("li");
 
 		const divEl = document.createElement("div");
@@ -142,3 +155,7 @@ function render() {
 //
 
 render();
+storeForm.filter.addEventListener("change", function () {
+	state.filter = storeForm.filter.value;
+	render();
+});
