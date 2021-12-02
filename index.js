@@ -64,6 +64,7 @@ async function addToCart(item) {
 			})
 		});
 	}
+	updateState();
 }
 
 async function removeFromCart(item) {
@@ -153,6 +154,7 @@ function sortDefault() {
 function renderStoreItems() {
 	storeItemList.innerHTML = "";
 	const selectedStoreItems = getSelecetedStoreItems();
+	sortStoreItems();
 	for (const item of selectedStoreItems) {
 		const liEl = document.createElement("li");
 
@@ -161,7 +163,7 @@ function renderStoreItems() {
 
 		const imgEl = document.createElement("img");
 		imgEl.alt = item.name;
-		imgEl.src = `../assets/icons/${addZeros(item.id)}-${item.name}.svg`;
+		imgEl.src = `assets/icons/${addZeros(item.id)}-${item.name}.svg`;
 
 		divEl.append(imgEl);
 
@@ -169,7 +171,7 @@ function renderStoreItems() {
 		buttonEl.innerText = "Add to cart";
 		buttonEl.addEventListener("click", function () {
 			addToCart(item);
-			render();
+			updateState();
 		});
 
 		liEl.append(divEl, buttonEl);
@@ -196,7 +198,7 @@ function renderCartItems() {
 		minusBtnEl.innerText = "-";
 		minusBtnEl.addEventListener("click", function () {
 			removeFromCart(item);
-			render();
+			updateState();
 		});
 
 		const spanEl = document.createElement("span");
@@ -208,6 +210,7 @@ function renderCartItems() {
 		plusBtnEl.innerText = "+";
 		plusBtnEl.addEventListener("click", function () {
 			addToCart(item);
+			updateState();
 		});
 
 		liEl.append(imgEl, pEl, minusBtnEl, spanEl, plusBtnEl);
@@ -238,17 +241,15 @@ async function updateState() {
 	render();
 }
 
-window.addEventListener("DOMContentLoaded", (event) => {
-	event.preventDefault();
+window.addEventListener("DOMContentLoaded", () => {
 	updateState();
 });
 
 storeForm.filter.addEventListener("change", function () {
 	state.filter = storeForm.filter.value;
-	render();
+	updateState();
 });
 
 storeForm.sort.addEventListener("change", function () {
-	sortStoreItems();
-	render();
+	updateState();
 });

@@ -61,12 +61,5 @@
       "type": "vegetable"
     }
   ],
-  "cart": [
-    {
-      "id": 1,
-      "name": "beetroot",
-      "price": 0.4,
-      "quantity": 15
-    }
-  ]
+  "cart": []
 }
