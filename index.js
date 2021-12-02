@@ -16,7 +16,8 @@ state = {
 		{ id: 10, name: "eggplant", price: 0.5, type: "vegetable" }
 	],
 	cart: [],
-	filter: "all"
+	filter: "all",
+	sortBy: "default"
 };
 
 //derived state
@@ -73,6 +74,67 @@ function removeFromCart(item) {
 			return cartItem.quantity > 0;
 		});
 	}
+}
+
+function sortStoreItems() {
+	state.sortBy = storeForm.sort.value;
+	switch (state.sortBy) {
+		case "alphabetAsc":
+			sortAlphabetAsc();
+			break;
+		case "alphabetDesc":
+			sortAlphabetDesc();
+			break;
+		case "priceAsc":
+			sortPriceAsc();
+			break;
+		case "priceDesc":
+			sortPriceDesc();
+			break;
+
+		default:
+			sortDefault();
+			break;
+	}
+}
+function sortAlphabetAsc() {
+	state.storeItems.sort(function (firstItem, secondItem) {
+		if (firstItem.name > secondItem.name) {
+			return 1;
+		}
+		if (firstItem.name < secondItem.name) {
+			return -1;
+		}
+		return 0;
+	});
+}
+function sortAlphabetDesc() {
+	state.storeItems.sort(function (firstItem, secondItem) {
+		if (firstItem.name > secondItem.name) {
+			return -1;
+		}
+		if (firstItem.name < secondItem.name) {
+			return 1;
+		}
+		return 0;
+	});
+}
+
+function sortPriceAsc() {
+	state.storeItems.sort(function (firstItem, secondItem) {
+		return firstItem.price - secondItem.price;
+	});
+}
+
+function sortPriceDesc() {
+	state.storeItems.sort(function (firstItem, secondItem) {
+		return secondItem.price - firstItem.price;
+	});
+}
+function sortDefault() {
+	state.storeItems.sort(function (firstItem, secondItem) {
+		return firstItem.id - secondItem.id;
+	});
 }
 
 //render
@@ -155,7 +217,13 @@ function render() {
 //
 
 render();
+
 storeForm.filter.addEventListener("change", function () {
 	state.filter = storeForm.filter.value;
+	render();
+});
+
+storeForm.sort.addEventListener("change", function () {
+	sortStoreItems();
 	render();
 });
