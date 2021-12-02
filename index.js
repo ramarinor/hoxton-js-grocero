@@ -2,7 +2,7 @@ const storeItemList = document.querySelector(".store--item-list");
 const cartItemList = document.querySelector(".cart--item-list");
 const totalNumberSpan = document.querySelector(".total-number");
 const storeForm = document.querySelector(".store--form");
-state = {
+const state = {
 	storeItems: [],
 	cart: [],
 	filter: "all",
