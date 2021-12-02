@@ -3,18 +3,7 @@ const cartItemList = document.querySelector(".cart--item-list");
 const totalNumberSpan = document.querySelector(".total-number");
 const storeForm = document.querySelector(".store--form");
 state = {
-	storeItems: [
-		{ id: 1, name: "beetroot", price: 0.4, type: "vegetable" },
-		{ id: 2, name: "carrot", price: 0.3, type: "vegetable" },
-		{ id: 3, name: "apple", price: 0.7, type: "fruit" },
-		{ id: 4, name: "apricot", price: 0.9, type: "fruit" },
-		{ id: 5, name: "avocado", price: 3.5, type: "fruit" },
-		{ id: 6, name: "bananas", price: 1.0, type: "fruit" },
-		{ id: 7, name: "bell-pepper", price: 0.5, type: "vegetable" },
-		{ id: 8, name: "berry", price: 1.4, type: "fruit" },
-		{ id: 9, name: "blueberry", price: 1.5, type: "fruit" },
-		{ id: 10, name: "eggplant", price: 0.5, type: "vegetable" }
-	],
+	storeItems: [],
 	cart: [],
 	filter: "all",
 	sortBy: "default"
@@ -47,7 +36,7 @@ function addZeros(number) {
 }
 
 //actions
-function addToCart(item) {
+async function addToCart(item) {
 	const itemFound = state.cart.find(function (cartItem) {
 		return cartItem.name === item.name;
 	});
@@ -58,20 +47,43 @@ function addToCart(item) {
 			price: item.price,
 			quantity: 1
 		};
-		state.cart.push(newCartItem);
+		await fetch("http://localhost:3000/cart", {
+			method: "POST",
+			body: JSON.stringify(newCartItem),
+			headers: { "Content-Type": "application/json" }
+		});
 	} else {
 		itemFound.quantity++;
+		await fetch("http://localhost:3000/cart/" + item.id, {
+			method: "PATCH",
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify({
+				quantity: itemFound.quantity
+			})
+		});
 	}
 }
 
-function removeFromCart(item) {
+async function removeFromCart(item) {
 	const itemFound = state.cart.find(function (cartItem) {
 		return cartItem.name === item.name;
 	});
 	itemFound.quantity--;
+	await fetch("http://localhost:3000/cart/" + item.id, {
+		method: "PATCH",
+		headers: {
+			"Content-Type": "application/json"
+		},
+		body: JSON.stringify({
+			quantity: itemFound.quantity
+		})
+	});
+
 	if (itemFound.quantity === 0) {
-		state.cart = state.cart.filter(function (cartItem) {
-			return cartItem.quantity > 0;
+		await fetch("http://localhost:3000/cart/" + item.id, {
+			method: "DELETE"
 		});
 	}
 }
@@ -149,7 +161,7 @@ function renderStoreItems() {
 
 		const imgEl = document.createElement("img");
 		imgEl.alt = item.name;
-		imgEl.src = `assets/icons/${addZeros(item.id)}-${item.name}.svg`;
+		imgEl.src = `../assets/icons/${addZeros(item.id)}-${item.name}.svg`;
 
 		divEl.append(imgEl);
 
@@ -195,7 +207,7 @@ function renderCartItems() {
 		plusBtnEl.className = "quantity-btn add-btn center";
 		plusBtnEl.innerText = "+";
 		plusBtnEl.addEventListener("click", function () {
-			addToCart(item), render();
+			addToCart(item);
 		});
 
 		liEl.append(imgEl, pEl, minusBtnEl, spanEl, plusBtnEl);
@@ -216,7 +228,20 @@ function render() {
 
 //
 
-render();
+async function updateState() {
+	const storeItemsRes = await fetch("http://localhost:3000/storeItems");
+	const storeItems = await storeItemsRes.json();
+	state.storeItems = storeItems;
+	const cartRes = await fetch("http://localhost:3000/cart");
+	const cart = await cartRes.json();
+	state.cart = cart;
+	render();
+}
+
+window.addEventListener("DOMContentLoaded", (event) => {
+	event.preventDefault();
+	updateState();
+});
 
 storeForm.filter.addEventListener("change", function () {
 	state.filter = storeForm.filter.value;

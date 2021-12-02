@@ -1,0 +1,72 @@
+{
+  "storeItems": [
+    {
+      "id": 1,
+      "name": "beetroot",
+      "price": 0.4,
+      "type": "vegetable"
+    },
+    {
+      "id": 2,
+      "name": "carrot",
+      "price": 0.3,
+      "type": "vegetable"
+    },
+    {
+      "id": 3,
+      "name": "apple",
+      "price": 0.7,
+      "type": "fruit"
+    },
+    {
+      "id": 4,
+      "name": "apricot",
+      "price": 0.9,
+      "type": "fruit"
+    },
+    {
+      "id": 5,
+      "name": "avocado",
+      "price": 3.5,
+      "type": "fruit"
+    },
+    {
+      "id": 6,
+      "name": "bananas",
+      "price": 1,
+      "type": "fruit"
+    },
+    {
+      "id": 7,
+      "name": "bell-pepper",
+      "price": 0.5,
+      "type": "vegetable"
+    },
+    {
+      "id": 8,
+      "name": "berry",
+      "price": 1.4,
+      "type": "fruit"
+    },
+    {
+      "id": 9,
+      "name": "blueberry",
+      "price": 1.5,
+      "type": "fruit"
+    },
+    {
+      "id": 10,
+      "name": "eggplant",
+      "price": 0.5,
+      "type": "vegetable"
+    }
+  ],
+  "cart": [
+    {
+      "id": 1,
+      "name": "beetroot",
+      "price": 0.4,
+      "quantity": 19
+    }
+  ]
+}
